@@ -7,7 +7,7 @@ import Nav from './components/controls/Nav';
 import Footer from './components/controls/Footer';
 import ProtectedRoute from './components/controls/ProtectedRoute';
 
-import UserPage from './components/views/UserPage';
+import HomePage from './components/views/HomePage';
 import AddEntryPage from './components/views/AddEntryPage';
 import SettingsPage from './components/views/SettingsPage';
 import LoginPage from './components/views/LoginPage';
@@ -57,7 +57,7 @@ function App() {
           <Redirect exact from="/" to="/home" />
 
           <ProtectedRoute exact path="/home">
-            <UserPage />
+            <HomePage />
           </ProtectedRoute>
 
           <ProtectedRoute exact path="/add">

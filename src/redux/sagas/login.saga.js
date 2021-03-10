@@ -49,6 +49,7 @@ function* logoutUser(action) {
     // cleanup client side data
     yield put({ type: 'CLEAR_USER' });
     yield put({ type: 'CLEAR_STUDY_HISTORY' });
+    yield put({ type: 'CLEAR_STUDY_STATISTICS' });
     
   } catch (error) {
     console.log('Error with user logout:', error);
