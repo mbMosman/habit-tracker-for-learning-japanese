@@ -8,6 +8,8 @@ import Footer from './components/controls/Footer';
 import ProtectedRoute from './components/controls/ProtectedRoute';
 
 import UserPage from './components/views/UserPage';
+import AddEntryPage from './components/views/AddEntryPage';
+import SettingsPage from './components/views/SettingsPage';
 import LoginPage from './components/views/LoginPage';
 import RegisterPage from './components/views/RegisterPage';
 
@@ -56,6 +58,14 @@ function App() {
 
           <ProtectedRoute exact path="/home">
             <UserPage />
+          </ProtectedRoute>
+
+          <ProtectedRoute exact path="/add">
+            <AddEntryPage />
+          </ProtectedRoute>
+
+          <ProtectedRoute exact path="/settings">
+            <SettingsPage />
           </ProtectedRoute>
 
           <ProtectedRoute exact path="/login" authRedirect="/home">

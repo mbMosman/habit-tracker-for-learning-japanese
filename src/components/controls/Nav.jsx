@@ -19,8 +19,9 @@ import ChevronRightIcon from '@material-ui/icons/ChevronRight';
 import ListItem from '@material-ui/core/ListItem';
 import ListItemIcon from '@material-ui/core/ListItemIcon';
 import ListItemText from '@material-ui/core/ListItemText';
-import InboxIcon from '@material-ui/icons/MoveToInbox';
-import MailIcon from '@material-ui/icons/Mail';
+import HomeIcon from '@material-ui/icons/Home';
+import PlusIcon from '@material-ui/icons/AddCircle';
+import GearIcon from '@material-ui/icons/Settings';
 
 const drawerWidth = 240;
 
@@ -108,8 +109,7 @@ function Nav() {
   return (
     <>
       <CssBaseline />
-      <AppBar
-        position="fixed"
+      <AppBar position="fixed"
         className={clsx(classes.appBar, {
           [classes.appBarShift]: open,
         })}
@@ -117,9 +117,7 @@ function Nav() {
         <Toolbar>
           {/* Only show menu if logged in */}
           {user.id && (
-          <IconButton
-            color="inherit"
-            aria-label="open drawer"
+          <IconButton color="inherit" aria-label="open drawer"
             onClick={handleDrawerOpen}
             edge="start"
             className={clsx(classes.menuButton, {
@@ -153,8 +151,8 @@ function Nav() {
           )}
         </Toolbar>
       </AppBar>
-      <Drawer
-        variant="permanent"
+      {user.id && (
+      <Drawer variant="permanent"
         className={clsx(classes.drawer, {
           [classes.drawerOpen]: open,
           [classes.drawerClose]: !open,
@@ -172,15 +170,22 @@ function Nav() {
           </IconButton>
         </div>
         <Divider />
-        <List>
-          {['Inbox', 'Starred', 'Send email', 'Drafts'].map((text, index) => (
-            <ListItem button key={text}>
-              <ListItemIcon>{index % 2 === 0 ? <InboxIcon /> : <MailIcon />}</ListItemIcon>
-              <ListItemText primary={text} />
+          <List>
+            <ListItem button key="home" onClick={()=>history.push('\home')}>
+              <ListItemIcon><HomeIcon /></ListItemIcon>
+              <ListItemText primary="Home" />
             </ListItem>
-          ))}
-        </List>
+            <ListItem button key="add" onClick={()=>history.push('\add')}>
+              <ListItemIcon><PlusIcon /></ListItemIcon>
+              <ListItemText primary="Add Entry" />
+            </ListItem>
+            <ListItem button key="settings" onClick={()=>history.push('\settings')}>
+              <ListItemIcon><GearIcon /></ListItemIcon>
+              <ListItemText primary="Settings" />
+            </ListItem>
+          </List>
       </Drawer>
+      )}
     </>
   );
 
