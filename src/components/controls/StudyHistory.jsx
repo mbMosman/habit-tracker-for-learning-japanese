@@ -1,11 +1,11 @@
-import React from 'react';
+import React, { useEffect } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 
 import { makeStyles } from '@material-ui/core/styles';
 import Button from '@material-ui/core/Button';
 import Table from '@material-ui/core/Table';
 import TableBody from '@material-ui/core/TableBody';
 import TableCell from '@material-ui/core/TableCell';
-import TableContainer from '@material-ui/core/TableContainer';
 import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
 import Typography from '@material-ui/core/Typography';
@@ -27,28 +27,20 @@ const useStyles = makeStyles((theme) => ({
 function StudyHistory() {
 
   const classes = useStyles();
-  const rows = [
-    {
-      id: 1,
-      date: '1/8/2019',
-      tool: 'Duolingo',
-      time: '35',
-      note: 'Activity - Level 2/5, Lesson 3/10'
-    },
-    {
-      id: 2,
-      date: '1/8/2019',
-      tool: 'Wanikani',
-      time: '23',
-      note: '53% Correct, need more practice...'
-    },    {
-      id: 3,
-      date: '1/6/2019',
-      tool: 'Genki',
-      time: '90',
-      note: 'Lesson 4 - Vocabulary & Exercises'
-    },
-  ]
+
+  const dispatch = useDispatch();
+  const studyHistory = useSelector((store) => store.studyHistory);
+
+  useEffect(() => {
+      dispatch({ type: 'FETCH_STUDY_HISTORY'});
+    }, 
+    []
+  );
+
+  const formatDate = (date) => {
+    const obj = new Date(date);
+    return obj.toLocaleDateString();
+  }
 
   return (
     <Paper className={classes.paper}>
@@ -66,12 +58,12 @@ function StudyHistory() {
           </TableRow>
         </TableHead>
         <TableBody>
-          {rows.map((row) => (
+          {studyHistory.map((row) => (
             <TableRow key={row.id}>
-              <TableCell>{row.date}</TableCell>
-              <TableCell>{row.tool}</TableCell>
-              <TableCell>{row.time} min</TableCell>
-              <TableCell>{row.note}</TableCell>
+              <TableCell>{formatDate(row.date)}</TableCell>
+              <TableCell>{row.name}</TableCell>
+              <TableCell>{row.study_time} min</TableCell>
+              <TableCell>{row.notes}</TableCell>
               <TableCell>
                 <Button variant="contained">Details</Button>
               </TableCell>
