@@ -11,7 +11,11 @@ const useStyles = makeStyles((theme) => ({
 
 function Footer() {
   const classes = useStyles();
-  return <footer className={classes.footer}>&copy; 2021  Mary Mosman</footer>;
+  return (
+    <footer className={classes.footer}>
+      My Japanese Study Tracker &copy; 2021  Mary Mosman
+    </footer>
+  );
 }
 
 export default Footer;
