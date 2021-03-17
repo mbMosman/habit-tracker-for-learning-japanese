@@ -12,6 +12,7 @@ import AddEntryPage from './components/views/AddEntryPage';
 import SettingsPage from './components/views/SettingsPage';
 import LoginPage from './components/views/LoginPage';
 import RegisterPage from './components/views/RegisterPage';
+import EntryDetailPage from './components/views/EntryDetailPage';
 
 import './App.css';
 
@@ -62,6 +63,10 @@ function App() {
 
           <ProtectedRoute exact path="/add">
             <AddEntryPage />
+          </ProtectedRoute>
+          
+          <ProtectedRoute exact path="/detail/:id">
+            <EntryDetailPage />
           </ProtectedRoute>
 
           <ProtectedRoute exact path="/settings">

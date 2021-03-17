@@ -1,6 +1,7 @@
 import { combineReducers } from 'redux';
 import errors from './errors.reducer';
 import user from './user.reducer';
+import studyDetail from './studyDetail.reducer';
 import studyHistory from './studyHistory.reducer';
 import studyStatistics from './studyStatistics.reducer';
 
@@ -13,6 +14,7 @@ import studyStatistics from './studyStatistics.reducer';
 const rootReducer = combineReducers({
   errors, // contains registrationMessage and loginMessage
   user, // logged in users info (id & username) if someone is logged in
+  studyDetail, // specific entry detail for view or edit
   studyHistory, // summary of entries for history table
   studyStatistics, // cumulative default stats for home page
 });

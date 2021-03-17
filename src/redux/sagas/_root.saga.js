@@ -4,6 +4,7 @@ import loginSaga from './login.saga';
 import registrationSaga from './registration.saga';
 import userSaga from './user.saga';
 import studyHistory from './studyHistory.saga';
+import studyDetail from './studyDetail.saga';
 import studyStatistics from './studyStatistics.saga';
 
 export default function* rootSaga() {
@@ -11,6 +12,7 @@ export default function* rootSaga() {
     loginSaga(), 
     registrationSaga(),
     userSaga(),
+    studyDetail(),
     studyHistory(),
     studyStatistics(),
   ]);

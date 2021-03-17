@@ -46,7 +46,6 @@ function UserPage() {
     }
     return message;
   }
-
   
   return (
     <Grid container spacing={3}>
