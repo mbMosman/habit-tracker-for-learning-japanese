@@ -50,14 +50,19 @@ function UserPage() {
   
   return (
     <Grid container spacing={3}>
-      <Grid item xs={12} md={4}>
-        <StatisticCard label="Study Time" value={formatTime(studyStatistics.study_time)} />
-      </Grid>
-      <Grid item xs={12} md={4}>
-        <StatisticCard label="Vocabulary Count" value={`${studyStatistics.vocab_count} words`} />
-      </Grid>
-      <Grid item xs={12} md={4}>
-        <StatisticCard label="Kanji Count" value={`${studyStatistics.kanji_count} kanji`} />
+      <Grid item container alignItems="stretch" spacing={3}>
+        <Grid item xs={12} md={4}>
+          <StatisticCard label="Study Time" 
+              value={formatTime(studyStatistics.study_time)} />
+        </Grid>
+        <Grid item xs={12} md={4}>
+          <StatisticCard label="Vocabulary Count" 
+              value={`${studyStatistics.vocab_count} words`} />
+        </Grid>
+        <Grid item xs={12} md={4}>
+          <StatisticCard label="Kanji Count" 
+              value={`${studyStatistics.kanji_count} kanji`} />
+        </Grid>
       </Grid>
       <Grid item container alignItems="stretch" spacing={3}>
         <Grid item xs={12} md={8}>
