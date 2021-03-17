@@ -1,16 +1,18 @@
 import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { useParams } from 'react-router-dom';
+import { useParams, useRouteMatch } from 'react-router-dom';
 
 
 function EntryDetailPage() {
 
   const dispatch = useDispatch();
   const details = useSelector((store) => store.studyDetail);
-  const { id } = useParams();
+  const {id} = useParams();
+  const routeMatch = useRouteMatch();
 
   useEffect(() => {
-      dispatch({ type: 'FETCH_STUDY_DETAIL', payload: {id} });
+      console.log('route match detail', routeMatch);
+      dispatch({ type: 'FETCH_STUDY_DETAIL', payload: { id } });
     }, 
     []
   );

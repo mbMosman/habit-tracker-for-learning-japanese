@@ -26,7 +26,6 @@ function UserPage() {
     const minutesRemaining = totalMinutes % (24*60)
     const hours = Math.floor( minutesRemaining / 60 );
     const minutes = minutesRemaining % 60;
-    console.log(days, minutesRemaining, hours, minutes);
     
     let message = '';
     if (days > 0) {

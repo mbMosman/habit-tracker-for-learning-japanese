@@ -2,7 +2,7 @@ import React from 'react';
 import clsx from 'clsx';
 import {useSelector} from 'react-redux';
 import { useDispatch } from 'react-redux';
-import { useHistory } from 'react-router-dom';
+import { useHistory, useLocation } from 'react-router-dom'; 
 import { makeStyles, useTheme } from '@material-ui/core/styles';
 import AppBar from '@material-ui/core/AppBar';
 import Drawer from '@material-ui/core/Drawer';
@@ -95,6 +95,7 @@ function Nav() {
   const user = useSelector((store) => store.user);
   const dispatch = useDispatch();
   const history = useHistory();
+  const { pathname } = useLocation();
   const classes = useStyles();
   const theme = useTheme();
   const [open, setOpen] = React.useState(false);
@@ -106,6 +107,21 @@ function Nav() {
   const handleDrawerClose = () => {
     setOpen(false);
   };
+
+  const getHeading = () => {
+    const tokens = pathname.split('/');
+    // first token is empty, 2nd is path
+    switch (tokens[1]) {
+      case ('add'):
+        return `ADD ENTRY`;
+      case ('detail'):
+        return `ENTRY DETAIL`;
+      case ('settings'):
+        return `SETTINGS`
+      default:
+        return `Welcome, ${user.username}!`;
+    }
+  }
 
   return (
     <>
@@ -137,7 +153,7 @@ function Nav() {
           {user.id && (
             <>
               <Typography className={classes.welcome}>
-                Welcome, {user.username}!
+                { getHeading() }
               </Typography>
               <Button color="inherit" onClick={() => dispatch({ type: 'LOGOUT' })}>
                 Log Out
