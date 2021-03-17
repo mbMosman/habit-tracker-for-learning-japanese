@@ -94,7 +94,8 @@ const useStyles = makeStyles((theme) => ({
 function Nav() {
   const user = useSelector((store) => store.user);
   const dispatch = useDispatch();
-  const history = useHistory();const classes = useStyles();
+  const history = useHistory();
+  const classes = useStyles();
   const theme = useTheme();
   const [open, setOpen] = React.useState(false);
 
@@ -171,15 +172,15 @@ function Nav() {
         </div>
         <Divider />
           <List>
-            <ListItem button key="home" onClick={()=>history.push('\home')}>
+            <ListItem button key="home" onClick={()=>history.push('/home')}>
               <ListItemIcon><HomeIcon /></ListItemIcon>
               <ListItemText primary="Home" />
             </ListItem>
-            <ListItem button key="add" onClick={()=>history.push('\add')}>
+            <ListItem button key="add" onClick={()=>history.push('/add')}>
               <ListItemIcon><PlusIcon /></ListItemIcon>
               <ListItemText primary="Add Entry" />
             </ListItem>
-            <ListItem button key="settings" onClick={()=>history.push('\settings')}>
+            <ListItem button key="settings" onClick={()=>history.push('/settings')}>
               <ListItemIcon><GearIcon /></ListItemIcon>
               <ListItemText primary="Settings" />
             </ListItem>
