@@ -83,10 +83,11 @@ const useStyles = makeStyles((theme) => ({
     justifyContent: 'space-between'
   },
   title: {
-    fontSize: '1.5em',
+    fontSize: '2em',
     flexGrow: 5,
   },
   welcome: {
+    fontSize: '1.5em',
     flexGrow: 1
   },
 }));
@@ -152,7 +153,7 @@ function Nav() {
           {/* If logged in, show welcome message & Log Out */}
           {user.id && (
             <>
-              <Typography className={classes.welcome}>
+              <Typography variant="h2" className={classes.welcome}>
                 { getHeading() }
               </Typography>
               <Button color="inherit" onClick={() => dispatch({ type: 'LOGOUT' })}>
