@@ -5,7 +5,7 @@ import Paper from '@material-ui/core/Paper';
 
 const useStyles = makeStyles((theme) => ({
   paper: {
-    padding: theme.spacing(1) * 3,
+    padding: theme.spacing(3),
     height: '100%',
   },
   heading: {
