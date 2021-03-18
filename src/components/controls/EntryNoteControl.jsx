@@ -60,13 +60,6 @@ function EntryNoteControl({id, noteText}) {
   const history = useHistory();
   const dispatch = useDispatch();
 
-  useEffect(() => {
-      console.log('------ in useEffect -----');
-      reset();
-    }, 
-    []
-  );
-
   const reset = () => {
     setEditText(noteText);
     setEditMode(false);

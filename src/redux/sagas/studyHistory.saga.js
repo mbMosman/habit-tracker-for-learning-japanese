@@ -4,12 +4,7 @@ import { put, takeLatest } from 'redux-saga/effects';
 // worker Saga: will be fired on "FETCH_USER" actions
 function* fetchStudyHistory() {
   try {
-    const config = {
-      headers: { 'Content-Type': 'application/json' },
-      withCredentials: true,
-    };
-
-    const response = yield axios.get('/api/study', config);
+    const response = yield axios.get('/api/study');
     yield put({ type: 'SET_STUDY_HISTORY', payload: response.data });
 
   } catch (error) {
