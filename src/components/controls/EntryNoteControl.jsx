@@ -66,7 +66,7 @@ function EntryNoteControl({id, noteText}) {
   }
 
   const saveEdit = () => {
-    dispatch( {type: 'UPDATE_NOTE_TEXT', payload: { id, text: editText }} );
+    dispatch( {type: 'UPDATE_STUDY_DETAIL', payload: { id, notes: editText }} );
     reset();
   }
 

@@ -25,9 +25,20 @@ function* deleteStudyDetail(action) {
   }
 }
 
+//Updates study detail using server API
+function* updateStudyDetail(action) {
+  try {
+    const response = yield axios.put(`/api/study/${action.payload.id}`, action.payload);
+    yield put({ type: 'FETCH_STUDY_DETAIL', payload: action.payload });
+  } catch (error) {
+    console.error('Failed to get study detail', error);
+  }
+}
+
 function* studyDetailSaga() {
   yield takeLatest('FETCH_STUDY_DETAIL', fetchStudyDetail);
   yield takeLatest('DELETE_STUDY_DETAIL', deleteStudyDetail);
+  yield takeLatest('UPDATE_STUDY_DETAIL', updateStudyDetail);
 }
 
 export default studyDetailSaga;
