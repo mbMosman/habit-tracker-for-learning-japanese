@@ -9,7 +9,8 @@ router.get('/', rejectUnauthenticated, (req, res) => {
       `SELECT e.id, e.date, st.name, e.study_time, e.vocab_count, e.kanji_count, e.notes 
       FROM entry e
       JOIN study_tool st on e.tool_id = st.id
-      WHERE e.user_id=$1;`;
+      WHERE e.user_id=$1 
+      ORDER BY date DESC;`;
   pool.query(queryText, [req.user.id])
     .then((result) => res.send(result.rows))
     .catch((error) => {
@@ -59,10 +60,32 @@ router.get('/:id', rejectUnauthenticated, (req, res) => {
     });
 });
 
-// Update entry note 
+// Delete study entry by id, must belong to logged in user
+router.delete('/:id/', rejectUnauthenticated, async (req, res) => {
+  try {
+    const selectQuery = 'SELECT e.id, e.user_id FROM entry as e WHERE e.id = $1;'
+    let selectResult = await pool.query(selectQuery, [req.params.id]);
+    let entry = selectResult.rows[0];
+    if (entry.user_id === req.user.id){
+      let query = `DELETE FROM entry WHERE id=$1;`;
+      await pool.query(query, [ req.params.id ]);
+      res.sendStatus(200);
+    } else {
+      console.log(`WARN: blocked delete for study detail id ${req.params.id} requested by user ${req.user.id}.`);
+      res.sendStatus(403);
+    }
+  } catch (error) {
+    console.log(`ERR: delete entry id ${req.params.id} failed for user ${req.user.id}`, error);
+    res.sendStatus(500);
+  }
+});
+
+// Update study entry, must belong to logged in user
+//   body requires at least one optional field
+//   optional fields: notes, study_time, vocab_count, kanji_count
 router.put('/:id/', rejectUnauthenticated, async (req, res) => {
   try {
-    const selectQuery = 'SELECT e.id, e.user_id, e.notes FROM entry as e WHERE e.id = $1;'
+    const selectQuery = 'SELECT e.id, e.user_id FROM entry as e WHERE e.id = $1;'
     let selectResult = await pool.query(selectQuery, [req.params.id]);
     let entry = selectResult.rows[0];
     if (entry.user_id === req.user.id){
@@ -118,7 +141,7 @@ router.put('/:id/', rejectUnauthenticated, async (req, res) => {
       res.sendStatus(403);
     }
   } catch (error) {
-    console.log(`ERR: update note for entry id ${req.params.id} failed for user ${req.user.id}`, error);
+    console.log(`ERR: update for entry id ${req.params.id} failed for user ${req.user.id}`, error);
     res.sendStatus(500);
   }
 });
@@ -160,7 +183,6 @@ router.post('/', rejectUnauthenticated, (req, res) => {
 
   // Do Insert
   let insertQuery = `INSERT INTO entry (${setFields.join(', ')}) VALUES(${setValues.join(', ')});`;
-  console.log('Insert query:', insertQuery);
   pool.query(insertQuery, values)
     .then( () => res.sendStatus(201) )
     .catch((error) => {
