@@ -12,8 +12,8 @@ router.get('/', rejectUnauthenticated, (req, res) => {
       WHERE e.user_id=$1;`;
   pool.query(queryText, [req.user.id])
     .then((result) => res.send(result.rows))
-    .catch((err) => {
-      console.log(`ERR: get study history failed for user ${req.user.id}`, err);
+    .catch((error) => {
+      console.log(`ERR: get study history failed for user ${req.user.id}`, error);
       res.sendStatus(500);
     });
 });
@@ -27,8 +27,8 @@ router.get('/statistics', rejectUnauthenticated, (req, res) => {
       WHERE e.user_id=$1;`;
   pool.query(queryText, [req.user.id])
     .then((result) => res.send(result.rows[0]))
-    .catch((err) => {
-      console.log(`ERR: get study history failed for user ${req.user.id}`, err);
+    .catch((error) => {
+      console.log(`ERR: get study history failed for user ${req.user.id}`, error);
       res.sendStatus(500);
     });
 });
@@ -53,18 +53,121 @@ router.get('/:id', rejectUnauthenticated, (req, res) => {
         res.sendStatus(403);
       }
     })
-    .catch((err) => {
-      console.log(`ERR: get study detail with id ${req.params.id} failed for user ${req.user.id}`, err);
+    .catch((error) => {
+      console.log(`ERR: get study detail with id ${req.params.id} failed for user ${req.user.id}`, error);
       res.sendStatus(500);
     });
 });
 
+// Update entry note 
+router.put('/:id/', rejectUnauthenticated, async (req, res) => {
+  try {
+    const selectQuery = 'SELECT e.id, e.user_id, e.notes FROM entry as e WHERE e.id = $1;'
+    let selectResult = await pool.query(selectQuery, [req.params.id]);
+    let entry = selectResult.rows[0];
+    if (entry.user_id === req.user.id){
+      let updateQuery = `UPDATE entry SET `;
+      const values = [];
 
-/**
- * POST route template
- */
-router.post('/', (req, res) => {
-  // POST route code here
+      // Add set expression for each field to update
+      if (req.body.notes) { 
+        values.push(req.body.notes);
+        updateQuery += `notes=$${values.length}`;
+      }
+      if (req.body.study_time) { 
+        if (values.length > 0) {
+          updateQuery += ', ';
+        }
+        values.push(req.body.study_time);
+        updateQuery += `study_time=$${values.length}`;
+      }
+      if (req.body.vocab_count) {  
+        if (values.length > 0) {
+          updateQuery += ', ';
+        }
+        values.push(req.body.vocab_count);
+        updateQuery += `vocab_count=$${values.length}`;
+      }
+      if (req.body.kanji_count) {  
+        if (values.length > 0) {
+          updateQuery += ', ';
+        }
+        values.push(req.body.kanji_count);
+        updateQuery += `kanji_count=$${values.length}`;
+        console.log(updateQuery, values);
+      }
+
+      // if nothing to update, fail 
+      if (values.length === 0) {
+        res.sendStatus(500);
+        return;
+      } else 
+        // Update values with id & add WHERE for entry id 
+        values.push(req.params.id)
+        updateQuery += ` WHERE id=$${values.length}`;
+
+        // Update values with user_id & add AND to WHERE 
+        values.push(req.user.id)
+        updateQuery += ` AND user_id=$${values.length};`;
+
+        // Do update
+        await pool.query(updateQuery, values);
+        res.sendStatus(200);
+    } else {
+      console.log(`WARN: blocked update for study detail id ${req.params.id} requested by user ${req.user.id}.`);
+      res.sendStatus(403);
+    }
+  } catch (error) {
+    console.log(`ERR: update note for entry id ${req.params.id} failed for user ${req.user.id}`, error);
+    res.sendStatus(500);
+  }
+});
+
+
+// Adds a new study entry
+//   body requires: date, tool_id, study_time
+//   optional fields: notes, vocab_count, kanji_count
+router.post('/', rejectUnauthenticated, (req, res) => {
+  
+  // Check required fields, fail if not there
+  if (!req.body.date || !req.body.tool_id || !req.body.study_time) {
+    console.log(`ERR: add entry missing required fields, req.body:`, req.body);
+    res.sendStatus(500);
+    return;
+  } 
+
+  // Have required fields, so add them
+  const values = [ req.user.id,  req.body.date, req.body.tool_id, req.body.study_time ];
+  let setFields = [ 'user_id', 'date', 'tool_id', 'study_time' ];
+  let setValues = [ '$1', '$2', '$3', '$4' ];
+
+  // Updates for each optional field to insert
+  if (req.body.notes) { 
+    values.push(req.body.notes);
+    setFields.push('notes');
+    setValues.push(`$${values.length}`);
+  }
+  if (req.body.vocab_count) { 
+    values.push(req.body.vocab_count);
+    setFields.push('vocab_count');
+    setValues.push(`$${values.length}`);
+  }
+  if (req.body.kanji_count) { 
+    values.push(req.body.kanji_count);
+    setFields.push('kanji_count');
+    setValues.push(`$${values.length}`);
+  }
+
+  // Do Insert
+  let insertQuery = `INSERT INTO entry (${setFields.join(', ')}) VALUES(${setValues.join(', ')});`;
+  console.log('Insert query:', insertQuery);
+  pool.query(insertQuery, values)
+    .then( () => res.sendStatus(201) )
+    .catch((error) => {
+      console.log(`ERR: adding new study entry`, error);
+      res.sendStatus(500);
+    });
+
 });
 
 module.exports = router;
