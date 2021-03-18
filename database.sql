@@ -46,7 +46,7 @@ CREATE TABLE tool_statistic (
 
 CREATE TABLE entry (
 	id SERIAL PRIMARY KEY,
-    date TIMESTAMP,
+    date TIMESTAMP NOT NULL,
     notes VARCHAR(1000),
     study_time INT NOT NULL,
     vocab_count INT DEFAULT 0,
@@ -54,7 +54,6 @@ CREATE TABLE entry (
     user_id INT REFERENCES login NOT NULL,
     tool_id INT REFERENCES study_tool NOT NULL
 );
-
 
 CREATE TABLE entry_statistic (
     id SERIAL PRIMARY KEY,
