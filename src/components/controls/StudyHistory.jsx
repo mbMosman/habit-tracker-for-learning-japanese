@@ -23,6 +23,9 @@ const useStyles = makeStyles((theme) => ({
   table: {
     minWidth: 750,
   },
+  notes: {
+    maxWidth: theme.spacing(50),
+  }
 }));
 
 function StudyHistory() {
@@ -64,7 +67,9 @@ function StudyHistory() {
               <TableCell>{formatDate(row.date)}</TableCell>
               <TableCell>{row.name}</TableCell>
               <TableCell>{row.study_time} min</TableCell>
-              <TableCell>{row.notes}</TableCell>
+              <TableCell className={classes.notes}>
+                <Typography noWrap >{row.notes}</Typography>
+              </TableCell>
               <TableCell>
                 <Button variant="contained" onClick={()=>history.push(`/detail/${row.id}`)}>
                   Details
