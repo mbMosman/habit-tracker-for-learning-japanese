@@ -20,21 +20,12 @@ INSERT INTO study_tool (id, name, url) VALUES
 -- Update study_tool id sequence to start at 100
 ALTER SEQUENCE study_tool_id_seq RESTART WITH 100;
 
-CREATE TABLE type (
-	id INT PRIMARY KEY,
-	name VARCHAR(30) NOT NULL,
-	display_label VARCHAR(30) NOT NULL
-);
-
--- Default statistic types for drop-down
-INSERT INTO type (id, name, display_label) VALUES 
-(1, 'numeric count', ''), (2, 'time (minutes)', 'minutes'); 
 
 -- Table for custom statistics
 CREATE TABLE statistic (
 	id SERIAL PRIMARY KEY,
 	label VARCHAR(80) NOT NULL,
-	type_id INT REFERENCES type NOT NULL,
+	measure VARCHAR(80),
 	user_id INT REFERENCES login
 );
 
@@ -54,6 +45,7 @@ CREATE TABLE entry (
     user_id INT REFERENCES login NOT NULL,
     tool_id INT REFERENCES study_tool NOT NULL
 );
+
 
 CREATE TABLE entry_statistic (
     id SERIAL PRIMARY KEY,

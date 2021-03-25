@@ -7,8 +7,8 @@ INSERT INTO study_tool (id, name, url, user_id) VALUES
 (10, 'Genki', NULL, 10001), 
 (11, 'Tadoku', 'https://tadoku.org/japanese/en/free-books-en/', 10001);
 
-INSERT INTO statistic (id, label, type_id, user_id) VALUES 
-(10, 'Page (count)', 2, 10001); 
+INSERT INTO statistic (id, label, measure, user_id) VALUES 
+(10, 'Page (count)', NULL, 10001); 
 
 INSERT INTO tool_statistic (tool_id, statistic_id) VALUES
 (11, 10); -- Tadoku to page (custom) 
