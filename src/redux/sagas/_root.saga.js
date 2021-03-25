@@ -6,6 +6,7 @@ import userSaga from './user.saga';
 import studyHistory from './studyHistory.saga';
 import studyDetail from './studyDetail.saga';
 import studyStatistics from './studyStatistics.saga';
+import studyTool from './studyTool.saga';
 
 export default function* rootSaga() {
   yield all([
@@ -15,5 +16,6 @@ export default function* rootSaga() {
     studyDetail(),
     studyHistory(),
     studyStatistics(),
+    studyTool(),
   ]);
 }

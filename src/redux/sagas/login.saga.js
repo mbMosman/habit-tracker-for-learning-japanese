@@ -50,6 +50,7 @@ function* logoutUser(action) {
     yield put({ type: 'CLEAR_USER' });
     yield put({ type: 'CLEAR_STUDY_HISTORY' });
     yield put({ type: 'CLEAR_STUDY_STATISTICS' });
+    yield put({ type: 'CLEAR_STUDY_TOOLS' });
     
   } catch (error) {
     console.log('Error with user logout:', error);

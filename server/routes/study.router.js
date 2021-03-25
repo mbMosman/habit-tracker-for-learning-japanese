@@ -29,7 +29,31 @@ router.get('/statistics', rejectUnauthenticated, (req, res) => {
   pool.query(queryText, [req.user.id])
     .then((result) => res.send(result.rows[0]))
     .catch((error) => {
-      console.log(`ERR: get study history failed for user ${req.user.id}`, error);
+      console.log(`ERR: get study statistics failed for user ${req.user.id}`, error);
+      res.sendStatus(500);
+    });
+});
+
+// Get Study Tools for logged in user
+router.get('/tools', rejectUnauthenticated, (req, res) => {
+  const queryText = 
+    `SELECT tool.id, tool.name, tool.url, 
+      CASE WHEN count(stats) = 0 
+        THEN ARRAY[]::json[] 
+        ELSE array_agg(stats.statistic) 
+      END AS custom_stats 
+    FROM study_tool as tool
+    LEFT OUTER JOIN (
+      SELECT ts.tool_id, json_build_object('id', stat.id, 'label', stat.label, 'measure', stat.measure) as statistic 
+      FROM tool_statistic ts
+      JOIN statistic stat on stat.id = ts.statistic_id
+      ) stats on stats.tool_id=tool.id 
+    WHERE user_id is NULL OR user_id=$1 
+    GROUP BY tool.id ORDER BY tool.name;`;
+  pool.query(queryText, [req.user.id])
+    .then((result) => res.send(result.rows))
+    .catch((error) => {
+      console.log(`ERR: get study tools failed for user ${req.user.id}`, error);
       res.sendStatus(500);
     });
 });
@@ -59,6 +83,21 @@ router.get('/:id', rejectUnauthenticated, (req, res) => {
       res.sendStatus(500);
     });
 });
+
+router.post('/', rejectUnauthenticated, (req, res) => {
+  console.log('Adding entry:', req.body);
+  // TODO - handle custom statistics
+  const entryQuery = 
+    `INSERT INTO entry (date, notes, user_id, tool_id, study_time, 
+      vocab_count, kanji_count) VALUES ($1, $2, $3, $4, $5, $6, $7);`;
+  pool.query(entryQuery, [req.body.date, req.body.note, req.user.id, req.body.toolId, 
+      req.body.studyTime, req.body.vocabCount, req.body.kanjiCount])
+    .then(() => res.send(201))
+    .catch((error) => {
+      console.log(`ERR: add study entry failed for user ${req.user.id}`, error);
+      res.sendStatus(500);
+    });
+})
 
 // Delete study entry by id, must belong to logged in user
 router.delete('/:id/', rejectUnauthenticated, async (req, res) => {

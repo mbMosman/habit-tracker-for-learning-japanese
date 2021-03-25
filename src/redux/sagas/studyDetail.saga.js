@@ -4,10 +4,18 @@ import { put, takeLatest } from 'redux-saga/effects';
 //Gets study detail using server API
 function* fetchStudyDetail(action) {
   try {
-
     const response = yield axios.get(`/api/study/${action.payload.id}`);
     yield put({ type: 'SET_STUDY_DETAIL', payload: response.data });
+  } catch (error) {
+    console.error('Failed to get study detail', error);
+  }
+}
 
+//Adds a new study detail entry using server API
+function* addStudyDetail(action) {
+  try {
+    const response = yield axios.post(`/api/study/`, action.payload);
+    yield put({ type: 'FETCH_STUDY_HISTORY' });
   } catch (error) {
     console.error('Failed to get study detail', error);
   }
@@ -37,6 +45,7 @@ function* updateStudyDetail(action) {
 
 function* studyDetailSaga() {
   yield takeLatest('FETCH_STUDY_DETAIL', fetchStudyDetail);
+  yield takeLatest('ADD_STUDY_DETAIL', addStudyDetail);
   yield takeLatest('DELETE_STUDY_DETAIL', deleteStudyDetail);
   yield takeLatest('UPDATE_STUDY_DETAIL', updateStudyDetail);
 }

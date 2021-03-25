@@ -4,6 +4,7 @@ import user from './user.reducer';
 import studyDetail from './studyDetail.reducer';
 import studyHistory from './studyHistory.reducer';
 import studyStatistics from './studyStatistics.reducer';
+import studyTools from './studyTool.reducer';
 
 // rootReducer is the primary reducer for our entire project
 // It bundles up all of the other reducers so our project can use them.
@@ -17,6 +18,7 @@ const rootReducer = combineReducers({
   studyDetail, // specific entry detail for view or edit
   studyHistory, // summary of entries for history table
   studyStatistics, // cumulative default stats for home page
+  studyTools, // study tools for logged in user
 });
 
 export default rootReducer;
