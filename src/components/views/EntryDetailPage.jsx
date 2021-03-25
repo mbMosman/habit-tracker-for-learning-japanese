@@ -1,11 +1,10 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useParams } from 'react-router-dom';
+import moment from 'moment';
 
 import { makeStyles } from '@material-ui/core/styles';
-import Button from '@material-ui/core/Button';
 import Grid from '@material-ui/core/Grid';
-import IconButton from '@material-ui/core/IconButton';
 import Typography from '@material-ui/core/Typography';
 import Paper from '@material-ui/core/Paper';
 
@@ -47,7 +46,7 @@ function EntryDetailPage() {
 
   const formatDate = (fullDateString) => {
     let date = new Date(fullDateString);
-    return date.toLocaleDateString();
+    return moment(date).format('MM/DD/YYYY');
   }
 
   const getStatistics = () => {
