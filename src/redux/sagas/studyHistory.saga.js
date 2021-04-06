@@ -1,7 +1,6 @@
 import axios from 'axios';
 import { put, takeLatest } from 'redux-saga/effects';
 
-// worker Saga: will be fired on "FETCH_USER" actions
 function* fetchStudyHistory() {
   try {
     const response = yield axios.get('/api/study');
@@ -12,8 +11,19 @@ function* fetchStudyHistory() {
   }
 }
 
-function* userSaga() {
-  yield takeLatest('FETCH_STUDY_HISTORY', fetchStudyHistory);
+function* fetchStudyGraph() {
+  try {
+    const response = yield axios.get('/api/study/graph');
+    yield put({ type: 'SET_STUDY_GRAPH', payload: response.data });
+
+  } catch (error) {
+    console.error('Failed to get study graph data', error);
+  }
 }
 
-export default userSaga;
+function* studyHistorySaga() {
+  yield takeLatest('FETCH_STUDY_HISTORY', fetchStudyHistory);
+  yield takeLatest('FETCH_STUDY_GRAPH', fetchStudyGraph);
+}
+
+export default studyHistorySaga;

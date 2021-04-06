@@ -2,6 +2,7 @@ import { combineReducers } from 'redux';
 import errors from './errors.reducer';
 import user from './user.reducer';
 import studyDetail from './studyDetail.reducer';
+import studyGraphData from './studyGraph.reducer';
 import studyHistory from './studyHistory.reducer';
 import studyStatistics from './studyStatistics.reducer';
 import studyTools from './studyTool.reducer';
@@ -17,6 +18,7 @@ const rootReducer = combineReducers({
   user, // logged in users info (id & username) if someone is logged in
   studyDetail, // specific entry detail for view or edit
   studyHistory, // summary of entries for history table
+  studyGraphData, // data for study progress graph 
   studyStatistics, // cumulative default stats for home page
   studyTools, // study tools for logged in user
 });

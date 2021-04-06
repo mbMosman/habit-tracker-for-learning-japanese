@@ -19,6 +19,21 @@ router.get('/', rejectUnauthenticated, (req, res) => {
     });
 });
 
+// Get graph datasets
+router.get('/graph', rejectUnauthenticated, (req, res) => {
+  const queryText = 
+      `SELECT array_agg(entry.date) as dates, array_agg(entry.study_time) as times, array_agg(entry.vocab_count) as vocab_counts, array_agg(entry.kanji_count) as kanji_counts
+      FROM (SELECT to_char(date, 'MM/DD/YYYY') date, SUM(study_time) study_time, SUM(vocab_count) vocab_count, SUM(kanji_count) kanji_count FROM entry
+      WHERE user_id=$1
+      GROUP BY date) as entry;`;
+  pool.query(queryText, [req.user.id])
+    .then((result) => res.send(result.rows[0]))
+    .catch((error) => {
+      console.log(`ERR: get study history graph data failed for user ${req.user.id}`, error);
+      res.sendStatus(500);
+    });
+});
+
 // Get Statistics for logged in user
 router.get('/statistics', rejectUnauthenticated, (req, res) => {
   const queryText = 
