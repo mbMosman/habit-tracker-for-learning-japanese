@@ -22,6 +22,11 @@ function UserPage() {
   );
 
   const formatTime = (totalMinutes) => {
+
+    if (!totalMinutes) {
+      return 'no time yet'
+    }
+
     const days = Math.floor( totalMinutes / (24*60) );
     const minutesRemaining = totalMinutes % (24*60)
     const hours = Math.floor( minutesRemaining / 60 );
@@ -55,11 +60,11 @@ function UserPage() {
         </Grid>
         <Grid item xs={12} md={4}>
           <StatisticCard label="Vocabulary Count" 
-              value={`${studyStatistics.vocab_count} words`} />
+              value={`${studyStatistics.vocab_count ? studyStatistics.vocab_count : 0} words`} />
         </Grid>
         <Grid item xs={12} md={4}>
           <StatisticCard label="Kanji Count" 
-              value={`${studyStatistics.kanji_count} kanji`} />
+              value={`${studyStatistics.kanji_count ? studyStatistics.kanji_count : 0} kanji`} />
         </Grid>
       </Grid>
       <Grid item container alignItems="stretch" spacing={3}>
