@@ -3,7 +3,7 @@ const studyGraphReducer = (state = {}, action) => {
     case 'SET_STUDY_GRAPH':
       return action.payload;
     case 'CLEAR_STUDY_GRAPH':
-      return [];
+      return {};
     default:
       return state;
   }

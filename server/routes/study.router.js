@@ -34,6 +34,29 @@ router.get('/graph', rejectUnauthenticated, (req, res) => {
     });
 });
 
+// Get streak data
+router.get('/streak', rejectUnauthenticated, (req, res) => {
+  const queryText = 
+      `with t as (SELECT distinct(entry.date::date) as date
+          FROM entry WHERE entry.user_id = $1)
+      select count(*)
+      from t
+      where t.date > (
+          select d.d
+          from generate_series('2021-01-01'::date, 'yesterday'::DATE, '1 day') d(d)
+          left outer join t on t.date = d.d::date
+          where t.date is null
+          order by d.d desc
+          limit 1
+      );`;
+  pool.query(queryText, [req.user.id])
+    .then((result) => res.send(result.rows[0]))
+    .catch((error) => {
+      console.log(`ERR: get study streak data failed for user ${req.user.id}`, error);
+      res.sendStatus(500);
+    });
+});
+
 // Get Statistics for logged in user
 router.get('/statistics', rejectUnauthenticated, (req, res) => {
   const queryText = 

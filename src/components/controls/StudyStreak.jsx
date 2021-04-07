@@ -1,4 +1,6 @@
-import React from 'react';
+import React, { useEffect } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { useHistory } from 'react-router-dom';
 import { makeStyles } from '@material-ui/core/styles';
 import Typography from '@material-ui/core/Typography';
 import Paper from '@material-ui/core/Paper';
@@ -26,6 +28,14 @@ const useStyles = makeStyles((theme) => ({
 function StudyStreak() {
 
   const classes = useStyles();
+  const dispatch = useDispatch();
+  const streak = useSelector((store) => store.studyStreak);
+
+  useEffect(() => {
+      dispatch({ type: 'FETCH_STUDY_STREAK'});
+    }, 
+    []
+  );
 
   return (
     <Paper className={classes.paper}>
@@ -34,7 +44,7 @@ function StudyStreak() {
       </Typography>
       <StarIcon className={classes.star} />
       <Typography className={classes.heading}>
-        3 Days
+        {streak.count} Day{ streak.count!=1 ? 's' : '' }
       </Typography>
     </Paper>
   );
